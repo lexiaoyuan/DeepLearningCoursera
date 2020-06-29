@@ -1,6 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
-import h5py
+import numpy as np
+
 from lr_utils import load_dataset
 
 # 参考博客：https://blog.csdn.net/u013733326/article/details/79639509
@@ -8,16 +8,14 @@ from lr_utils import load_dataset
 # 把数据加载到主程序
 train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_dataset()
 # 看一下里面的图片长什么样
-index = 60
+# index = 60
 # plt.imshow(train_set_x_orig[index])
 # print("train_set_y=" + str(train_set_y)) # 看一下训练集里面的标签是什么样的
 
-# 打印出当前的训练标签值
-# 使用np.squeeze的目的是压缩维度，【未压缩】train_set_y[:,index]的值为[1] , 【压缩后】np.squeeze(train_set_y[:,index])的值为1
-print("【使用np.squeeze：" + str(np.squeeze(train_set_y[:, index])) + "，不使用np.squeeze： " + str(train_set_y[:, index]) + "】")
-# 只有压缩后的值才能进行解码操作
-print("y=" + str(train_set_y[:, index]) + ", it's a " + classes[np.squeeze(train_set_y[:, index])].decode(
-    "utf-8") + "' picture")
+# 打印出当前的训练标签值 使用np.squeeze的目的是压缩维度，【未压缩】train_set_y[:,index]的值为[1] , 【压缩后】np.squeeze(train_set_y[:,index])的值为1 print(
+# "【使用np.squeeze：" + str(np.squeeze(train_set_y[:, index])) + "，不使用np.squeeze： " + str(train_set_y[:, index]) + "】")
+# 只有压缩后的值才能进行解码操作 print("y=" + str(train_set_y[:, index]) + ", it's a " + classes[np.squeeze(train_set_y[:,
+# index])].decode("utf-8") + "' picture")
 
 '''
 m_train ：训练集里图片的数量。
@@ -29,14 +27,14 @@ m_test = test_set_y.shape[1]  # 测试集里图片的数量。
 num_px = train_set_x_orig.shape[1]  # 训练、测试集里面的图片的宽度和高度（均为64x64）。
 
 # 现在看一看我们加载的东西的具体情况
-print("训练集的数量: m_train = " + str(m_train))
-print("测试集的数量 : m_test = " + str(m_test))
-print("每张图片的宽/高 : num_px = " + str(num_px))
-print("每张图片的大小 : (" + str(num_px) + ", " + str(num_px) + ", 3)")
-print("训练集_图片的维数 : " + str(train_set_x_orig.shape))
-print("训练集_标签的维数 : " + str(train_set_y.shape))
-print("测试集_图片的维数: " + str(test_set_x_orig.shape))
-print("测试集_标签的维数: " + str(test_set_y.shape))
+print("训练集的数量: m_train = " + str(m_train))  # m_train = 209
+print("测试集的数量 : m_test = " + str(m_test))  # m_test = 50
+print("每张图片的宽/高 : num_px = " + str(num_px))  # num_px = 64
+print("每张图片的大小 : (" + str(num_px) + ", " + str(num_px) + ", 3)")  # (64, 64, 3)
+print("训练集_图片的维数 : " + str(train_set_x_orig.shape))  # (209, 64, 64, 3)
+print("训练集_标签的维数 : " + str(train_set_y.shape))  # (1, 209)
+print("测试集_图片的维数: " + str(test_set_x_orig.shape))  # (50, 64, 64, 3)
+print("测试集_标签的维数: " + str(test_set_y.shape))  # (1, 50)
 
 # X_flatten = X.reshape(X.shape [0]，-1).T ＃X.T是X的转置
 # 将训练集的维度降低并转置。
@@ -44,10 +42,12 @@ train_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T
 # 将测试集的维度降低并转置。
 test_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T
 
-print("训练集降维最后的维度： " + str(train_set_x_flatten.shape))
-print("训练集_标签的维数 : " + str(train_set_y.shape))
-print("测试集降维之后的维度: " + str(test_set_x_flatten.shape))
-print("测试集_标签的维数 : " + str(test_set_y.shape))
+# 降维之后，每一列表示一张图片，训练集共有209列，64*64*3=12288行
+
+print("训练集降维最后的维度： " + str(train_set_x_flatten.shape))  # (12288, 209)
+print("训练集_标签的维数 : " + str(train_set_y.shape))  # (1, 209)
+print("测试集降维之后的维度: " + str(test_set_x_flatten.shape))  # (12288, 50)
+print("测试集_标签的维数 : " + str(test_set_y.shape))  # (1, 50)
 
 # 标准化我们的数据集
 train_set_x = train_set_x_flatten / 255
@@ -83,6 +83,16 @@ print("sigmoid(0) = " + str(sigmoid(0)))
 print("sigmoid(9.2) = " + str(sigmoid(9.2)))
 
 
+# 构建ReLU函数
+def relu(z):
+    return np.where(z <= 0, 0, z)
+
+
+# 构建tanh函数
+def tanh(x):
+    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+
+
 # 初始化参数w和b
 def initialize_with_zeros(dim):
     """
@@ -95,7 +105,8 @@ def initialize_with_zeros(dim):
             w  - 维度为（dim，1）的初始化向量。
             b  - 初始化的标量（对应于偏差）
     """
-    w = np.zeros(shape=(dim, 1))
+    # w = np.zeros(shape=(dim, 1))
+    w = np.random.randn(dim, 1) * 0.008
     b = 0
     # 使用断言来确保我要的数据是正确的
     assert (w.shape == (dim, 1))  # w的维度是(dim,1)
@@ -261,7 +272,7 @@ print("predictions = " + str(predict(w, b, X)))
 
 
 # 整合到一个model()函数中
-def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0.5, print_cost=False):
+def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0.002, print_cost=False):
     """
     通过调用之前实现的函数来构建逻辑回归模型
 
@@ -308,23 +319,26 @@ print("====================测试model====================")
 d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000, learning_rate=0.005, print_cost=True)
 
 # 绘制图
+'''
 costs = np.squeeze(d['costs'])
 plt.plot(costs)
 plt.ylabel('cost')
 plt.xlabel('iterations (per hundreds)')
 plt.title("Learning rate =" + str(d["learning_rate"]))
 plt.show()
-
 '''
-learning_rates = [0.01, 0.001, 0.0001]
-models = {}
-for i in learning_rates:
-    print ("learning rate is: " + str(i))
-    models[str(i)] = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 1500, learning_rate = i, print_cost = False)
-    print ('\n' + "-------------------------------------------------------" + '\n')
 
-for i in learning_rates:
-    plt.plot(np.squeeze(models[str(i)]["costs"]), label= str(models[str(i)]["learning_rate"]))
+
+# learning_rates = [0.01, 0.02, 0.03, 0.001, 0.0001]
+models = {}
+for i in range(1, 9):
+    print("learning rate is: " + str(i))
+    models[str(i)] = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000, learning_rate=i*0.001,
+                           print_cost=False)
+    print('\n' + "-------------------------------------------------------" + '\n')
+
+for i in range(1, 9):
+    plt.plot(np.squeeze(models[str(i)]["costs"]), label=str(models[str(i)]["learning_rate"]))
 
 plt.ylabel('cost')
 plt.xlabel('iterations')
@@ -333,4 +347,3 @@ legend = plt.legend(loc='upper center', shadow=True)
 frame = legend.get_frame()
 frame.set_facecolor('0.90')
 plt.show()
-'''
