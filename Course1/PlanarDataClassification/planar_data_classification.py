@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import sklearn.linear_model
-
+import numpy as np
+from testCases import layer_sizes_test_case, initialize_parameters_test_case, forward_propagation_test_case, compute_cost_test_case, backward_propagation_test_case, update_parameters_test_case, nn_model_test_case, predict_test_case
 from planar_utils import plot_decision_boundary, sigmoid, load_planar_dataset
-from testCases import *
+
 
 # %matplotlib inline #如果你使用用的是Jupyter Notebook的话请取消注释。
 
@@ -12,7 +13,8 @@ np.random.seed(1)  # 设置一个固定的随机种子，以保证接下来的�
 X, Y = load_planar_dataset()
 
 # 查看数据集
-plt.scatter(X[0, :], X[1, :], c=np.squeeze(Y), s=40, cmap=plt.cm.Spectral)  # 绘制散点图
+plt.scatter(X[0, :], X[1, :], c=np.squeeze(
+    Y), s=40, cmap=plt.cm.Spectral)  # 绘制散点图
 plt.show()
 
 # 看一下训练集里的数据
@@ -155,7 +157,8 @@ def forward_propagation(X, parameters):
 print("=========================测试forward_propagation=========================")
 X_assess, parameters = forward_propagation_test_case()
 A2, cache = forward_propagation(X_assess, parameters)
-print(np.mean(cache["Z1"]), np.mean(cache["A1"]), np.mean(cache["Z2"]), np.mean(cache["A2"]))
+print(np.mean(cache["Z1"]), np.mean(cache["A1"]),
+      np.mean(cache["Z2"]), np.mean(cache["A2"]))
 
 
 # 计算成本函数
@@ -173,8 +176,8 @@ def compute_cost(A2, Y, parameters):
     """
 
     m = Y.shape[1]
-    W1 = parameters["W1"]
-    W2 = parameters["W2"]
+    # W1 = parameters["W1"]
+    # W2 = parameters["W2"]
 
     # 计算成本
     logprobs = np.multiply(np.log(A2), Y) + np.multiply((1 - Y), np.log(1 - A2))
@@ -208,7 +211,7 @@ def backward_propagation(parameters, cache, X, Y):
     """
     m = X.shape[1]
 
-    W1 = parameters["W1"]
+    # W1 = parameters["W1"]
     W2 = parameters["W2"]
 
     A1 = cache["A1"]
@@ -301,10 +304,10 @@ def nn_model(X, Y, n_h, num_iterations, print_cost=False):
     n_y = layer_sizes(X, Y)[2]
 
     parameters = initialize_parameters(n_x, n_h, n_y)
-    W1 = parameters["W1"]
-    b1 = parameters["b1"]
-    W2 = parameters["W2"]
-    b2 = parameters["b2"]
+    # W1 = parameters["W1"]
+    # b1 = parameters["b1"]
+    # W2 = parameters["W2"]
+    # b2 = parameters["b2"]
 
     for i in range(num_iterations):
         A2, cache = forward_propagation(X, parameters)
@@ -322,7 +325,8 @@ def nn_model(X, Y, n_h, num_iterations, print_cost=False):
 print("=========================测试nn_model=========================")
 X_assess, Y_assess = nn_model_test_case()
 
-parameters = nn_model(X_assess, Y_assess, 5, num_iterations=10000, print_cost=False)
+parameters = nn_model(X_assess, Y_assess, 5,
+                      num_iterations=10000, print_cost=False)
 print("W1 = " + str(parameters["W1"]))
 print("b1 = " + str(parameters["b1"]))
 print("W2 = " + str(parameters["W2"]))
@@ -335,11 +339,11 @@ def predict(parameters, X):
     使用学习的参数，为X中的每个示例预测一个类
 
     参数：
-		parameters - 包含参数的字典类型的变量。
-	    X - 输入数据（n_x，m）
+                parameters - 包含参数的字典类型的变量。
+            X - 输入数据（n_x，m）
 
     返回
-		predictions - 我们模型预测的向量（红色：0 /蓝色：1）
+                predictions - 我们模型预测的向量（红色：0 /蓝色：1）
     """
     A2, cache = forward_propagation(X, parameters)
     predictions = np.round(A2)
@@ -363,7 +367,8 @@ plot_decision_boundary(lambda x: predict(parameters, x.T), X, Y)
 plt.title("Decision Boundary for hidden layer size " + str(n_h))
 
 predictions = predict(parameters, X)
-print('准确率: %d' % float((np.dot(Y, predictions.T) + np.dot(1 - Y, 1 - predictions.T)) / float(Y.size) * 100) + '%')
+print('准确率: %d' % float((np.dot(Y, predictions.T) +
+                         np.dot(1 - Y, 1 - predictions.T)) / float(Y.size) * 100) + '%')
 
 # 更改隐藏层节点数量
 plt.figure(figsize=(16, 32))
@@ -374,5 +379,6 @@ for i, n_h in enumerate(hidden_layer_sizes):
     parameters = nn_model(X, Y, n_h, num_iterations=5000)
     plot_decision_boundary(lambda x: predict(parameters, x.T), X, Y)
     predictions = predict(parameters, X)
-    accuracy = float((np.dot(Y, predictions.T) + np.dot(1 - Y, 1 - predictions.T)) / float(Y.size) * 100)
+    accuracy = float((np.dot(Y, predictions.T) + np.dot(1 - Y,
+                                                        1 - predictions.T)) / float(Y.size) * 100)
     print("隐藏层的节点数量： {}  ，准确率: {} %".format(n_h, accuracy))

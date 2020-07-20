@@ -1,7 +1,5 @@
 # -*- coding: UTF-8 -*-
-"""
-# WANGZHE12
-"""
+
 import numpy as np
 
 

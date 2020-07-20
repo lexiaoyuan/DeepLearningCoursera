@@ -127,14 +127,15 @@ def propagate(w, b, X, Y):
 
     返回：
         cost- 逻辑回归的负对数似然成本
-        dw  - 相对于w的损失梯度，因此与w相同的形状
-        db  - 相对于b的损失梯度，因此与b的形状相同
+        dw  - 相对于w的损失梯度，因此与w维度相同
+        db  - 相对于b的损失梯度，因此与b维度相同
     """
     m = X.shape[1]
 
     # 正向传播
     A = sigmoid(np.dot(w.T, X) + b)  # 计算激活值，请参考公式2。
-    cost = (- 1 / m) * np.sum(Y * np.log(A) + (1 - Y) * (np.log(1 - A)))  # 计算成本，请参考公式3和4。
+    cost = (- 1 / m) * np.sum(Y * np.log(A) + (1 - Y)
+                              * (np.log(1 - A)))  # 计算成本，请参考公式3和4。
 
     # 反向传播
     dw = (1 / m) * np.dot(X, (A - Y).T)  # 请参考视频中的偏导公式。
@@ -157,7 +158,8 @@ def propagate(w, b, X, Y):
 # 测试一下propagate
 print("====================测试propagate====================")
 # 初始化一些参数
-w, b, X, Y = np.array([[1], [2]]), 2, np.array([[1, 2], [3, 4]]), np.array([[1, 0]])
+w, b, X, Y = np.array([[1], [2]]), 2, np.array(
+    [[1, 2], [3, 4]]), np.array([[1, 0]])
 grads, cost = propagate(w, b, X, Y)
 print("dw = " + str(grads["dw"]))
 print("db = " + str(grads["db"]))
@@ -221,8 +223,10 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
 # 测试optimize
 print("====================测试optimize====================")
-w, b, X, Y = np.array([[1], [2]]), 2, np.array([[1, 2], [3, 4]]), np.array([[1, 0]])
-params, grads, costs = optimize(w, b, X, Y, num_iterations=100, learning_rate=0.009, print_cost=False)
+w, b, X, Y = np.array([[1], [2]]), 2, np.array(
+    [[1, 2], [3, 4]]), np.array([[1, 0]])
+params, grads, costs = optimize(
+    w, b, X, Y, num_iterations=100, learning_rate=0.009, print_cost=False)
 print("w = " + str(params["w"]))
 print("b = " + str(params["b"]))
 print("dw = " + str(grads["dw"]))
@@ -267,7 +271,8 @@ def predict(w, b, X):
 
 # 测试predict
 print("====================测试predict====================")
-w, b, X, Y = np.array([[1], [2]]), 2, np.array([[1, 2], [3, 4]]), np.array([[1, 0]])
+w, b, X, Y = np.array([[1], [2]]), 2, np.array(
+    [[1, 2], [3, 4]]), np.array([[1, 0]])
 print("predictions = " + str(predict(w, b, X)))
 
 
@@ -290,7 +295,8 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
     """
     w, b = initialize_with_zeros(X_train.shape[0])
 
-    parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
+    parameters, grads, costs = optimize(
+        w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
 
     # 从字典“参数”中检索参数w和b
     w, b = parameters["w"], parameters["b"]
@@ -300,8 +306,10 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
     Y_prediction_train = predict(w, b, X_train)
 
     # 打印训练后的准确性
-    print("训练集准确性：", format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100), "%")
-    print("测试集准确性：", format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100), "%")
+    print("训练集准确性：", format(
+        100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100), "%")
+    print("测试集准确性：", format(
+        100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100), "%")
 
     d = {
         "costs": costs,
@@ -316,7 +324,8 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
 
 print("====================测试model====================")
 # 这里加载的是真实的数据，请参见上面的代码部分。
-d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000, learning_rate=0.005, print_cost=True)
+d = model(train_set_x, train_set_y, test_set_x, test_set_y,
+          num_iterations=2000, learning_rate=0.005, print_cost=True)
 
 # 绘制图
 '''
@@ -338,7 +347,8 @@ for i in range(1, 9):
     print('\n' + "-------------------------------------------------------" + '\n')
 
 for i in range(1, 9):
-    plt.plot(np.squeeze(models[str(i)]["costs"]), label=str(models[str(i)]["learning_rate"]))
+    plt.plot(np.squeeze(models[str(i)]["costs"]),
+             label=str(models[str(i)]["learning_rate"]))
 
 plt.ylabel('cost')
 plt.xlabel('iterations')

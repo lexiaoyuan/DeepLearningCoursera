@@ -146,7 +146,7 @@ print('v["dW2"] = ' + str(v["dW2"]))
 print('v["db2"] = ' + str(v["db2"]))
 
 
-def update_parameters_with_momentun(parameters, grads, v, beta, learning_rate):
+def update_parameters_with_momentum(parameters, grads, v, beta, learning_rate):
     """
     使用动量更新参数
     参数：
@@ -186,7 +186,7 @@ def update_parameters_with_momentun(parameters, grads, v, beta, learning_rate):
 # 测试update_parameters_with_momentun
 print("--------------测试update_parameters_with_momentun--------------")
 parameters, grads, v = testCase.update_parameters_with_momentum_test_case()
-update_parameters_with_momentun(
+update_parameters_with_momentum(
     parameters, grads, v, beta=0.9, learning_rate=0.01)
 
 print("W1 = " + str(parameters["W1"]))
@@ -387,15 +387,14 @@ def model(X, Y, layers_dims, optimizer, learning_rate=0.0007, mini_batch_size=64
             cost = opt_utils.compute_cost(A3, minibatch_Y)
 
             # 反向传播
-            grads = opt_utils.backward_propagation(
-                minibatch_X, minibatch_Y, cache)
+            grads = opt_utils.backward_propagation(minibatch_X, minibatch_Y, cache)
 
             # 更新参数
             if optimizer == "gd":
                 parameters = update_parameters_with_gd(
                     parameters, grads, learning_rate)
             elif optimizer == "momentum":
-                parameters, v = update_parameters_with_momentun(
+                parameters, v = update_parameters_with_momentum(
                     parameters, grads, v, beta, learning_rate)
             elif optimizer == "adam":
                 t = t + 1

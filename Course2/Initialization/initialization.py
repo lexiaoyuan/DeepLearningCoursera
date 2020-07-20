@@ -53,8 +53,7 @@ def model(X, Y, learning_rate=0.01, num_iterations=15000, print_cost=True, initi
         grads = init_utils.backward_propagation(X, Y, cache)
 
         # 更新参数
-        parameters = init_utils.update_parameters(
-            parameters, grads, learning_rate)
+        parameters = init_utils.update_parameters(parameters, grads, learning_rate)
 
         # 记录成本
         if i % 1000 == 0:
@@ -161,8 +160,7 @@ def initialize_parameters_random(layers_dims):
     L = len(layers_dims)  # 层数
 
     for l in range(1, L):
-        parameters['W'+str(l)] = np.random.randn(layers_dims[l],
-                                                 layers_dims[l-1])*10
+        parameters['W'+str(l)] = np.random.randn(layers_dims[l], layers_dims[l-1])*10
         parameters['b'+str(l)] = np.zeros((layers_dims[l], 1))
 
         # 使用断言确保我的数据格式是正确的

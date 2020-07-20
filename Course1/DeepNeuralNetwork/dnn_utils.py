@@ -1,5 +1,6 @@
 ﻿import numpy as np
 
+
 def sigmoid(Z):
     """
     Implements the sigmoid activation in numpy
@@ -16,6 +17,7 @@ def sigmoid(Z):
     cache = Z
 
     return A, cache
+
 
 def sigmoid_backward(dA, cache):
     """
@@ -38,6 +40,7 @@ def sigmoid_backward(dA, cache):
 
     return dZ
 
+
 def relu(Z):
     """
     Implement the RELU function.
@@ -50,12 +53,13 @@ def relu(Z):
     cache -- a python dictionary containing "A" ; stored for computing the backward pass efficiently
     """
 
-    A = np.maximum(0,Z)
+    A = np.maximum(0, Z)
 
     assert(A.shape == Z.shape)
 
-    cache = Z 
+    cache = Z
     return A, cache
+
 
 def relu_backward(dA, cache):
     """
@@ -70,12 +74,11 @@ def relu_backward(dA, cache):
     """
 
     Z = cache
-    dZ = np.array(dA, copy=True) # just converting dz to a correct object.
+    dZ = np.array(dA, copy=True)  # just converting dz to a correct object.
 
-    # When z <= 0, you should set dz to 0 as well. 
+    # When z <= 0, you should set dz to 0 as well.
     dZ[Z <= 0] = 0
 
     assert (dZ.shape == Z.shape)
 
     return dZ
-
