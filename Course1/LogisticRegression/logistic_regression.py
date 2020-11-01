@@ -52,7 +52,7 @@ print("训练集_标签的维数 : " + str(train_set_y.shape))  # (1, 209)
 print("测试集降维之后的维度: " + str(test_set_x_flatten.shape))  # (12288, 50)
 print("测试集_标签的维数 : " + str(test_set_y.shape))  # (1, 50)
 
-# 标准化我们的数据集
+# 标准化我们的数据集，让标准化的数据位于[0,1]之间
 train_set_x = train_set_x_flatten / 255
 test_set_x = test_set_x_flatten / 255
 
@@ -80,12 +80,6 @@ def sigmoid(z):
     """
     s = 1 / (1 + np.exp(-z))
     return s
-
-
-# 测试sigmoid()
-print("====================测试sigmoid====================")
-print("sigmoid(0) = " + str(sigmoid(0)))
-print("sigmoid(9.2) = " + str(sigmoid(9.2)))
 
 
 # 构建ReLU函数
