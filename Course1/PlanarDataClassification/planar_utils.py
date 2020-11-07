@@ -30,13 +30,18 @@ def sigmoid(x):
 
 
 def load_planar_dataset():
+    """ 加载平面数据集 """
     np.random.seed(1)
     m = 400  # number of examples
     N = int(m / 2)  # number of points per class
     D = 2  # dimensionality
     X = np.zeros((m, D))  # data matrix where each row is a single example
+    # print(X)
+    # print(X.shape)  # (400, 2)
     # labels vector (0 for red, 1 for blue)
     Y = np.zeros((m, 1), dtype='uint8')
+    # print(Y)
+    # print(Y.shape)  # (400, 1)
     a = 4  # maximum ray of the flower
 
     for j in range(2):
@@ -50,7 +55,15 @@ def load_planar_dataset():
     X = X.T
     Y = Y.T
 
+    """ print(X)
+    print(X.shape)
+    print(Y)
+    print(Y.shape) """
+
     return X, Y
+
+
+# load_planar_dataset()
 
 
 def load_extra_datasets():
