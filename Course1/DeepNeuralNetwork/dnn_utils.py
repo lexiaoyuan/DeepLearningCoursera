@@ -34,7 +34,7 @@ def sigmoid_backward(dA, cache):
     Z = cache
 
     s = 1/(1+np.exp(-Z))
-    dZ = dA * s * (1-s)
+    dZ = dA * s * (1-s)  # s' = s^2 * np.exp(-Z) = s*(1-s)
 
     assert (dZ.shape == Z.shape)
 

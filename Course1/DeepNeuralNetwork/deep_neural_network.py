@@ -66,7 +66,7 @@ def initialize_parameters_deep(layers_dims):
     """
     np.random.seed(3)
     parameters = {}
-    L = len(layers_dims)
+    L = len(layers_dims)  # 5
 
     for l in range(1, L):
         parameters["W" + str(l)] = np.random.randn(layers_dims[l],
@@ -96,13 +96,13 @@ def linear_forward(A, W, b):
     实现前向传播的线性部分。
 
     参数：
-        A - 来自上一层（或输入数据）的激活，维度为(上一层的节点数量，示例的数量）
+        A - 来自上一层（或输入数据）的激活，维度为(12288，209）
         W - 权重矩阵，numpy数组，维度为（当前图层的节点数量，前一图层的节点数量）
         b - 偏向量，numpy向量，维度为（当前图层节点数量，1）
 
     返回：
          Z - 激活功能的输入，也称为预激活参数
-         cache - 一个包含“A”，“W”和“b”的字典，存储这些变量以有效地计算后向传递
+         cache - 一个包含“A”，“W”和“b”的元组，存储这些变量以有效地计算后向传递
     """
     Z = np.dot(W, A) + b
     assert (Z.shape == (W.shape[0], A.shape[1]))
@@ -124,7 +124,7 @@ def linear_activation_forward(A_prev, W, b, activation):
     实现LINEAR-> ACTIVATION 这一层的前向传播
 
     参数：
-        A_prev - 来自上一层（或输入层）的激活，维度为(上一层的节点数量，示例数）
+        A_prev - 来自上一层（或输入层）的激活，维度为(12288，209）
         W - 权重矩阵，numpy数组，维度为（当前层的节点数量，前一层的大小）
         b - 偏向量，numpy阵列，维度为（当前层的节点数量，1）
         activation - 选择在此层中使用的激活函数名，字符串类型，【"sigmoid" | "relu"】
@@ -177,7 +177,7 @@ def L_model_forward(X, parameters):
     """
     caches = []
     A = X
-    L = len(parameters) // 2
+    L = len(parameters) // 2  # 4
     for l in range(1, L):
         A_prev = A
         A, cache = linear_activation_forward(
@@ -207,7 +207,7 @@ def compute_cost(AL, Y):
     实施等式（4）定义的成本函数。
 
     参数：
-        AL - 与标签预测相对应的概率向量，维度为（1，示例数量）
+        AL - 与标签预测相对应的概率向量，维度为（1，209）
         Y - 标签向量（例如：如果不是猫，则为0，如果是猫则为1），维度为（1，数量）
 
     返回：
@@ -335,8 +335,7 @@ def L_model_backward(AL, Y, caches):
     dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))
 
     current_cache = caches[L - 1]
-    grads["dA" + str(L)], grads["dW" + str(L)], grads["db" + str(L)] = linear_activation_backward(dAL, current_cache,
-                                                                                                  "sigmoid")
+    grads["dA" + str(L)], grads["dW" + str(L)], grads["db" + str(L)] = linear_activation_backward(dAL, current_cache, "sigmoid")
 
     for l in reversed(range(L - 1)):
         current_cache = caches[l]
@@ -398,9 +397,9 @@ def two_layer_model(X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000
     """
     实现一个两层的神经网络，【LINEAR->RELU】 -> 【LINEAR->SIGMOID】
     参数：
-        X - 输入的数据，维度为(n_x，例子数)
-        Y - 标签，向量，0为非猫，1为猫，维度为(1,数量)
-        layers_dims - 层数的向量，维度为(n_y,n_h,n_y)
+        X - 输入的数据，维度为(12288，209)
+        Y - 标签，向量，0为非猫，1为猫，维度为(1,209)
+        layers_dims - 层数的向量，维度为(12288,7,1)
         learning_rate - 学习率
         num_iterations - 迭代的次数
         print_cost - 是否打印成本值，每100次打印一次
@@ -478,6 +477,8 @@ def two_layer_model(X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000
 train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = lr_utils.load_dataset()
 
 train_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T
+print(train_x_flatten)
+print(train_x_flatten.shape)  # (12288, 209)
 test_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T
 
 train_x = train_x_flatten / 255
@@ -491,8 +492,7 @@ n_h = 7
 n_y = 1
 layers_dims = (n_x, n_h, n_y)
 
-parameters = two_layer_model(train_x, train_set_y, layers_dims=(n_x, n_h, n_y), num_iterations=2500,
-                             print_cost=True, isPlot=True)
+parameters = two_layer_model(train_x, train_set_y, layers_dims=(n_x, n_h, n_y), num_iterations=2500, print_cost=True, isPlot=True)
 
 
 # 预测函数
@@ -540,7 +540,7 @@ def L_layer_model(X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000, 
     参数：
             X - 输入的数据，维度为(n_x，例子数)
         Y - 标签，向量，0为非猫，1为猫，维度为(1,数量)
-        layers_dims - 层数的向量，维度为(n_y,n_h,···,n_h,n_y)
+        layers_dims - 层数的向量，维度为(n_x,n_h,···,n_h,n_y)
         learning_rate - 学习率
         num_iterations - 迭代的次数
         print_cost - 是否打印成本值，每100次打印一次
@@ -584,8 +584,11 @@ def L_layer_model(X, Y, layers_dims, learning_rate=0.0075, num_iterations=3000, 
 train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = lr_utils.load_dataset()
 
 train_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T
+print(train_x_flatten)
+print(train_x_flatten.shape)  # (12288, 209)
 test_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T
 
+# 归一化
 train_x = train_x_flatten / 255
 train_y = train_set_y
 test_x = test_x_flatten / 255
