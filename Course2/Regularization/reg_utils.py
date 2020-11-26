@@ -56,16 +56,16 @@ def initialize_parameters(layer_dims):
 
     np.random.seed(3)
     parameters = {}
-    L = len(layer_dims)  # number of layers in the network
+    L = len(layer_dims)  # 4
 
     for l in range(1, L):
         parameters['W' + str(l)] = np.random.randn(layer_dims[l],
                                                    layer_dims[l-1]) / np.sqrt(layer_dims[l-1])
         parameters['b' + str(l)] = np.zeros((layer_dims[l], 1))
 
-        assert(parameters['W' + str(l)].shape ==
+        """ assert(parameters['W' + str(l)].shape ==
                layer_dims[l], layer_dims[l-1])
-        assert(parameters['W' + str(l)].shape == layer_dims[l], 1)
+        assert(parameters['W' + str(l)].shape == layer_dims[l], 1) """
 
     return parameters
 
@@ -180,7 +180,7 @@ def update_parameters(parameters, grads, learning_rate):
                   parameters['b' + str(i)] = ...
     """
 
-    L = len(parameters) // 2  # number of layers in the neural networks
+    L = len(parameters) // 2  # 3
 
     # Update rule for each parameter
     for k in range(L):
@@ -195,7 +195,15 @@ def update_parameters(parameters, grads, learning_rate):
 def load_2D_dataset(is_plot=True):
     data = sio.loadmat('datasets/data.mat')
     train_X = data['X'].T
+
+    print(train_X)
+    print(train_X.shape)  # (2, 211)
+
     train_Y = data['y'].T
+
+    print(train_Y)
+    print(train_Y.shape)  # (1, 211)
+
     test_X = data['Xval'].T
     test_Y = data['yval'].T
     if is_plot:
@@ -203,6 +211,9 @@ def load_2D_dataset(is_plot=True):
                     c=reduce(operator.add, train_Y), s=40, cmap=plt.cm.Spectral)
 
     return train_X, train_Y, test_X, test_Y
+
+
+# load_2D_dataset()
 
 
 def predict(X, y, parameters):
@@ -245,7 +256,7 @@ def plot_decision_boundary(model, X, y):
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                          np.arange(y_min, y_max, h))
     # Predict the function value for the whole grid
-    Z = model(np.c_[xx.ravel(), yy.ravel()])
+    Z = model(np.c_[xx.ravel(), yy.ravel()])  # model是一个函数，np.c_[]作为一个参数传递给model函数中的x
     Z = Z.reshape(xx.shape)
     # Plot the contour and training examples
     plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)

@@ -150,7 +150,7 @@ def update_parameters(parameters, grads, learning_rate):
                   parameters['b' + str(i)] = ...
     """
 
-    L = len(parameters) // 2  # number of layers in the neural networks
+    L = len(parameters) // 2  # 3
 
     # Update rule for each parameter
     for k in range(L):
@@ -196,6 +196,12 @@ def predict(X, y, parameters):
 def load_dataset(is_plot=True):
     np.random.seed(1)
     train_X, train_Y = sklearn.datasets.make_circles(n_samples=300, noise=.05)
+
+    """ print(train_X)  # 生成的样本。
+    print(train_X.shape)  # (300, 2)
+    print(train_Y)  # 每个样本的类成员的整数标签（0或1）
+    print(train_Y.shape)  # (300,) """
+
     np.random.seed(2)
     test_X, test_Y = sklearn.datasets.make_circles(n_samples=100, noise=.05)
     # Visualize the data
@@ -207,6 +213,9 @@ def load_dataset(is_plot=True):
     test_X = test_X.T
     test_Y = test_Y.reshape((1, test_Y.shape[0]))
     return train_X, train_Y, test_X, test_Y
+
+
+# load_dataset()
 
 
 def plot_decision_boundary(model, X, y):

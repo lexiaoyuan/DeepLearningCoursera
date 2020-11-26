@@ -16,8 +16,8 @@ def model(X, Y, learning_rate=0.01, num_iterations=15000, print_cost=True, initi
     实现一个三层的神经网络：LINEAR ->RELU -> LINEAR -> RELU -> LINEAR -> SIGMOID
 
     参数：
-        X - 输入的数据，维度为(2, 要训练/测试的数量)
-        Y - 标签，【0 | 1】，维度为(1，对应的是输入的数据的标签)
+        X - 输入的数据，维度为(300, 2)
+        Y - 标签，【0 | 1】，维度为(300, )
         learning_rate - 学习速率
         num_iterations - 迭代的次数
         print_cost - 是否打印成本值，每迭代1000次打印一次
@@ -89,7 +89,7 @@ def initialize_parameters_zeros(layers_dims):
             bL - 偏置向量，维度为（layers_dims[L],1）
     """
     parameters = {}
-    L = len(layers_dims)  # 网络层数
+    L = len(layers_dims)  # 4
     for l in range(1, L):
         parameters["W"+str(l)] = np.zeros((layers_dims[l], layers_dims[l-1]))
         parameters["b"+str(l)] = np.zeros((layers_dims[l], 1))

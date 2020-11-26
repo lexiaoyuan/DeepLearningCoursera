@@ -35,6 +35,7 @@ def model(X, Y, learning_rate=0.3, num_iterations=30000, print_cost=True, is_plo
 
     # 初始化参数
     parameters = reg_utils.initialize_parameters(layers_dims)
+    print(parameters)
 
     # 开始学习
     for i in range(0, num_iterations):
@@ -114,6 +115,7 @@ plt.title("不使用正则化")
 ax = plt.gca()
 ax.set_xlim([-0.75, 0.40])
 ax.set_ylim([-0.75, 0.65])
+# lambda x作为一个参数为x的匿名函数传给plot_decision_boundary中的model
 reg_utils.plot_decision_boundary(
     lambda x: reg_utils.predict_dec(parameters, x.T), train_X, train_Y)
 
@@ -238,8 +240,8 @@ def forward_propagation_with_dropout(X, parameters, keep_prob=0.5):
 
     # 步骤1：初始化矩阵D1 = np.random.rand(..., ...)
     D1 = np.random.rand(A1.shape[0], A1.shape[1])
-    D1 = D1 < keep_prob  # 步骤2：将D1的值转换为0或1（使用keep_prob作为阈值）
-    A1 = A1 * D1  # 步骤3：舍弃A1的一些结点（将它的值变为0或False）
+    D1 = D1 < keep_prob  # 步骤2：将D1的值转换为True或False（使用keep_prob作为阈值）
+    A1 = A1 * D1  # 步骤3：舍弃A1的一些结点（将它的值乘以False）
     A1 = A1 / keep_prob  # 步骤4：缩放未舍弃的结点（不为0）的值
 
     Z2 = np.dot(W2, A1) + b2
@@ -247,8 +249,8 @@ def forward_propagation_with_dropout(X, parameters, keep_prob=0.5):
 
     # 步骤1：初始化矩阵D2 = np.random.rand(..., ...)
     D2 = np.random.rand(A2.shape[0], A2.shape[1])
-    D2 = D2 < keep_prob  # 步骤2：将D1的值转换为0或1（使用keep_prob作为阈值）
-    A2 = A2 * D2  # 步骤3：舍弃A1的一些结点（将它的值变为0或False）
+    D2 = D2 < keep_prob  # 步骤2：将D2的值转换为True或False（使用keep_prob作为阈值）
+    A2 = A2 * D2  # 步骤3：舍弃A2的一些结点（将它的值乘以False）
     A2 = A2 / keep_prob  # 步骤4：缩放未舍弃的结点（不为0）的值
 
     Z3 = np.dot(W3, A2) + b3
