@@ -70,16 +70,15 @@ def initialize_parameters(layer_dims):
 
     np.random.seed(3)
     parameters = {}
-    L = len(layer_dims)  # number of layers in the network
-
+    L = len(layer_dims)  # 4
     for l in range(1, L):
         parameters['W' + str(l)] = np.random.randn(layer_dims[l],
                                                    layer_dims[l-1]) * np.sqrt(2 / layer_dims[l-1])
         parameters['b' + str(l)] = np.zeros((layer_dims[l], 1))
 
-        assert(parameters['W' + str(l)].shape ==
+        """  assert(parameters['W' + str(l)].shape ==
                layer_dims[l], layer_dims[l-1])
-        assert(parameters['W' + str(l)].shape == layer_dims[l], 1)
+        assert(parameters['W' + str(l)].shape == layer_dims[l], 1) """
 
     return parameters
 
@@ -261,4 +260,13 @@ def load_dataset(is_plot=True):
     train_X = train_X.T
     train_Y = train_Y.reshape((1, train_Y.shape[0]))
 
+    """ print(train_X)
+    print(train_X.shape)  # (2, 300)
+    print(train_Y)
+    print(train_Y.shape)  # (1, 300)
+    plt.show() """
+
     return train_X, train_Y
+
+
+# load_dataset()

@@ -27,7 +27,7 @@ def update_parameters_with_gd(parameters, grads, learning_rate):
     返回值：
         parameters - 字典，包含了更新后的参数
     """
-    L = len(parameters) // 2  # 神经网络的层数
+    L = len(parameters) // 2  # 3
 
     for l in range(L):
         parameters["W" + str(l + 1)] = parameters["W" + str(l + 1)] - \
@@ -64,17 +64,18 @@ def random_mini_batches(X, Y, mini_batch_size=64, seed=0):
 
     """
     np.random.seed(seed)  # 指定随机种子
-    m = X.shape[1]
+    m = X.shape[1]  # 300
     mini_batches = []
 
     # 第一步：打乱顺序
     permutation = list(np.random.permutation(m))  # 它会返回一个长度为m的随机数据，且里面的数是0到m-1
+    print(permutation)
     shuffled_X = X[:, permutation]  # 将每一列的数据按permutation的顺序来重新排列
     shuffled_Y = Y[:, permutation].reshape((1, m))
 
     # 第二步：分割
     # 把你的训练集分割成多少份，如果值是99.99，那么返回值是99，剩下的0.99会被舍弃
-    num_complete_minibatches = math.floor(m / mini_batch_size)
+    num_complete_minibatches = math.floor(m / mini_batch_size)  # 4
     for k in range(0, num_complete_minibatches):
         mini_batch_X = shuffled_X[:, k *
                                   mini_batch_size: (k + 1) * mini_batch_size]
@@ -125,7 +126,7 @@ def initialize_velocity(parameters):
             v["db" + str(l)] = dbl的速度
 
     """
-    L = len(parameters) // 2  # 神经网络的层数
+    L = len(parameters) // 2  # 3
     v = {}
 
     for l in range(L):
@@ -165,7 +166,7 @@ def update_parameters_with_momentum(parameters, grads, v, beta, learning_rate):
         parameters - 更新后的参数字典
         v - 包含了更新后的速度变量
     """
-    L = len(parameters) // 2
+    L = len(parameters) // 2  # 3
 
     for l in range(L):
         # 计算速度
@@ -218,7 +219,7 @@ def initialize_adam(parameters):
             s["db" + str(l)] = ...
 
     """
-    L = len(parameters) // 2
+    L = len(parameters) // 2   # 3
     v = {}
     s = {}
 
@@ -277,21 +278,29 @@ def update_parameters_with_adam(parameters, grads, v,  s, t, learning_rate=0.01,
 
     for l in range(L):
         # 梯度的移动平均值，输入："v, grads, beta1",输出："v"
-        v["dW" + str(l + 1)] = beta1 * v["dW" + str(l + 1)] + (1 - beta1) * grads["dW" + str(l + 1)]
-        v["db" + str(l + 1)] = beta1 * v["db" + str(l + 1)] + (1 - beta1) * grads["db" + str(l + 1)]
+        v["dW" + str(l + 1)] = beta1 * v["dW" + str(l + 1)] + \
+            (1 - beta1) * grads["dW" + str(l + 1)]
+        v["db" + str(l + 1)] = beta1 * v["db" + str(l + 1)] + \
+            (1 - beta1) * grads["db" + str(l + 1)]
 
         # 计算第一阶段的偏差修正后的估计值，输入"v, beta1, t"，输出："v_corrected"
-        v_corrected["dW" + str(l + 1)] = v["dW" + str(l + 1)] / (1 - np.power(beta1, t))
+        v_corrected["dW" + str(l + 1)] = v["dW" + str(l + 1)
+                                           ] / (1 - np.power(beta1, t))
 
-        v_corrected["db" + str(l + 1)] = v["db" + str(l + 1)] / (1 - np.power(beta1, t))
+        v_corrected["db" + str(l + 1)] = v["db" + str(l + 1)
+                                           ] / (1 - np.power(beta1, t))
 
         # 计算平方梯度的移动平均值，输入："s, grads, beta2"， 输出："s"
-        s["dW" + str(l + 1)] = beta2 * s["dW" + str(l + 1)] + (1 - beta2) * np.square(grads["dW" + str(l + 1)])
-        s["db" + str(l + 1)] = beta2 * s["db" + str(l + 1)] + (1 - beta2) * np.square(grads["db" + str(l + 1)])
+        s["dW" + str(l + 1)] = beta2 * s["dW" + str(l + 1)] + \
+            (1 - beta2) * np.square(grads["dW" + str(l + 1)])
+        s["db" + str(l + 1)] = beta2 * s["db" + str(l + 1)] + \
+            (1 - beta2) * np.square(grads["db" + str(l + 1)])
 
         # 计算第二阶段的偏差修正后的估计值，输入："s, beta2, t"，输出："s_corrected"
-        s_corrected["dW" + str(l + 1)] = s["dW" + str(l + 1)] / (1 - np.power(beta2, t))
-        s_corrected["db" + str(l + 1)] = s["db" + str(l + 1)] / (1 - np.power(beta2, t))
+        s_corrected["dW" + str(l + 1)] = s["dW" + str(l + 1)
+                                           ] / (1 - np.power(beta2, t))
+        s_corrected["db" + str(l + 1)] = s["db" + str(l + 1)
+                                           ] / (1 - np.power(beta2, t))
 
         # 更新参数，输入："parameters, learning_rate, v_corrected, s_corrected, epsilon"，输出："parameters"。
         parameters["W" + str(l + 1)] = parameters["W" + str(l + 1)] - learning_rate * (
@@ -387,7 +396,8 @@ def model(X, Y, layers_dims, optimizer, learning_rate=0.0007, mini_batch_size=64
             cost = opt_utils.compute_cost(A3, minibatch_Y)
 
             # 反向传播
-            grads = opt_utils.backward_propagation(minibatch_X, minibatch_Y, cache)
+            grads = opt_utils.backward_propagation(
+                minibatch_X, minibatch_Y, cache)
 
             # 更新参数
             if optimizer == "gd":
@@ -454,7 +464,8 @@ opt_utils.plot_decision_boundary(
 
 # 使用Adam优化的梯度下降
 layers_dims = [train_X.shape[0], 5, 2, 1]
-parameters = model(train_X, train_Y, layers_dims, optimizer="adam", is_plot=True)
+parameters = model(train_X, train_Y, layers_dims,
+                   optimizer="adam", is_plot=True)
 
 # 预测
 preditions = opt_utils.predict(train_X, train_Y, parameters)
